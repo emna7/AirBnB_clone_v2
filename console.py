@@ -42,7 +42,22 @@ class HBNBCommand(cmd.Cmd):
             if not line:
                 raise SyntaxError()
             my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
+            newdict = dict()
+            classname = str(my_list[0])
+            del my_list[0]
+            for i in range(len(my_list)):
+                my_list[i] = my_list[i].split("=")
+            for key, value in my_list:
+                if type(eval(value)) is str:
+                    value = value[1:]
+                    value = value[:-1]
+                    value = value.replace("_", " ")
+                    value = value.replace('"', '\\"')
+                    newdict[key] = str(value)
+                else:
+                    newdict[key] = eval(value)
+            obj = eval("{}()".format(classname))
+            obj.__dict__.update(newdict)
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
