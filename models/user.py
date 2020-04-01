@@ -23,3 +23,7 @@ class User(BaseModel, Base):
                         nullable=True)
     last_name = Column(String(128),
                        nullable=True)
+
+    def init(self, args, **kwargs):
+        """ initializes user """
+        super().init(args, **kwargs)
