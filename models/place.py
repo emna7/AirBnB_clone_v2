@@ -2,6 +2,7 @@
 """This is the place class"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class Place(BaseModel, Base):
@@ -39,3 +40,15 @@ class Place(BaseModel, Base):
     longitude = Column(Float,
                    nullable=True)
     amenity_ids = []
+    reviews = relationship("Review", backref="place", cascade="save-update, delete")
+
+    @property
+    def reviews(self):
+        """ Getter attribute that returns a dictionary of cities in a state """
+        from models import storage
+        objects = storage.all(Review)
+        newdict = dict()
+        for key, value in objects:
+            if value.id == self.id:
+                newdict[key] = value
+        return (newdict)

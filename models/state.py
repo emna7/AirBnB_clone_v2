@@ -17,10 +17,10 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """ Getter attribute that returns a dictionary of cities in a state """
-        from models import storage
         objects = storage.all(City)
         newdict = dict()
         for key, value in objects:
+            from models import storage
             if value.id == self.id:
                 newdict[key] = value
         return (newdict)
