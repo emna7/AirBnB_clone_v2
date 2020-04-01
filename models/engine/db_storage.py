@@ -11,7 +11,7 @@ from models.place import Place
 from models.review import Review
 
 from sqlalchemy import (create_engine)
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage():
@@ -22,6 +22,7 @@ class DBStorage():
     """
     __engine = None
     __session = None
+    all_classes = ["State", "City", "User", "Place", "Review"]
 
     def __init__(self):
         """ Init method for DBStorage class """
@@ -43,9 +44,11 @@ class DBStorage():
         query = list()
         newdict = dict()
         if cls:
-            query = self.__session.Query(cls).all()
+            query = self.__session.query(cls).all()
         else:
-            query = self.__session.Query.all()
+            for obj in self.all_classes:
+                obj = eval(obj)
+                query.append(self.__session.query(obj).all())
         for item in query:
             key = item.name + "." + item.id
             newdict[key] = item
@@ -68,8 +71,8 @@ class DBStorage():
         """ Creates all tables in database and set a session """
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(expire_on_commit=False)
-        session_factory.configure(bind=engine)
-        Session = scoped_session(Session)
+        session_factory.configure(bind=self.__engine)
+        Session = scoped_session(session_factory)
         self.__session = Session()
         
             
