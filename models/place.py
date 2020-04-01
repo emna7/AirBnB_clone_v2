@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """This is the place class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+import models
 
 
 class Place(BaseModel, Base):
@@ -20,6 +21,12 @@ class Place(BaseModel, Base):
         longitude: longitude in float
         amenity_ids: list of Amenity ids
     """
+    place_amenity = Table("place_amenity", Base.metadata,
+        Column("place_id", String(60), ForeignKey("places.id"), primary_key=True,
+            nullable=False),
+        Column("amenity_id", String(60), ForeignKey("amenities.id"), primary_key=True,
+            nullable=False))
+
     __tablename__ = "places"
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
@@ -41,14 +48,33 @@ class Place(BaseModel, Base):
                    nullable=True)
     amenity_ids = []
     reviews = relationship("Review", backref="place", cascade="save-update, delete")
+    amenities = relationship("Amenity", backref="place", secondary="place_amenity", viewonly=False)
 
-    @property
-    def reviews(self):
-        """ Getter attribute that returns a dictionary of cities in a state """
-        from models import storage
-        objects = storage.all(Review)
-        newdict = dict()
-        for key, value in objects:
-            if value.id == self.id:
-                newdict[key] = value
-        return (newdict)
+    if models.storage_type != 'db':
+        @property
+        def reviews(self):
+            """ Getter attribute that returns a dictionary of cities in a state """
+            from models import storage
+            objects = storage.all(Review)
+            newdict = dict()
+            for key, value in objects:
+                if value.id == self.id:
+                    newdict[key] = value
+            return (newdict)
+
+        @property
+        def amenities(self):
+            """ Getter method that returns a dictionary of cities in a state """
+            from models import storage
+            objects = storage.all(Amenity)
+            newdict = dict()
+            for key, value in objects:
+                if value.id == self.id:
+                    newdict[key] = value
+            return (newdict)
+
+        @amenities.setter
+        def amenities(self, obj):
+            """ Setter method that adds an Amenity """
+            if (type(obj) == Amenity):
+                self.amenity_ids.append(obj.id)

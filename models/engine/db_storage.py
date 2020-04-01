@@ -22,7 +22,7 @@ class DBStorage():
     """
     __engine = None
     __session = None
-    all_classes = ["State", "City", "User", "Place", "Review"]
+    all_classes = ["State", "City", "User", "Place", "Review", "Amenity"]
 
     def __init__(self):
         """ Init method for DBStorage class """
