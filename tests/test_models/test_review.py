@@ -7,6 +7,9 @@ from models.base_model import BaseModel
 import pep8
 
 
+env = os.environ.get('HBNB_TYPE_STORAGE')
+
+
 class TestReview(unittest.TestCase):
     """this will test the place class"""
 
