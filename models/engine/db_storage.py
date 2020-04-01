@@ -22,7 +22,7 @@ class DBStorage():
     """
     __engine = None
     __session = None
-    all_classes = ["State", "City", "User", "Place", "Review"]
+    all_classes = ["State", "City"]
 
     def __init__(self):
         """ Init method for DBStorage class """
@@ -42,18 +42,20 @@ class DBStorage():
     def all(self, cls=None):
         """ Returns a dictionary of objects which their name is specified """
         mylist = list()
-        tmplist = list()
         newdict = dict()
-        if cls:
-            mylist = self.__session.query(cls).all()
+        if cls is not None:
+            obj = eval(cls)
+            mylist = self.__session.query(obj).all()
+            for item in mylist:
+                key = item.__class__.__name__ + "." + item.id
+                newdict[key] = item
         else:
             for obj in self.all_classes:
                 obj = eval(obj)
-                tmplist = self.__session.query(obj).all()
-                mylist.append(tmplist)
-        for item in mylist:
-            key = item.name + "." + item.id
-            newdict[key] = item
+                mylist = self.__session.query(obj).all()
+                for item in mylist:
+                    key = item.__class__.__name__ + "." + item.id
+                    newdict[key] = item
         return (newdict)
 
     def new(self, obj):
