@@ -41,15 +41,17 @@ class DBStorage():
 
     def all(self, cls=None):
         """ Returns a dictionary of objects which their name is specified """
-        query = list()
+        mylist = list()
+        tmplist = list()
         newdict = dict()
         if cls:
-            query = self.__session.query(cls).all()
+            mylist = self.__session.query(cls).all()
         else:
             for obj in self.all_classes:
                 obj = eval(obj)
-                query.append(self.__session.query(obj).all())
-        for item in query:
+                tmplist = self.__session.query(obj).all()
+                mylist.append(tmplist)
+        for item in mylist:
             key = item.name + "." + item.id
             newdict[key] = item
         return (newdict)

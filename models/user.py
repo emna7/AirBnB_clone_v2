@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """This is the user class"""
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """This is the class for user
     Attributes:
         email: email address
