@@ -7,6 +7,9 @@ from models.base_model import BaseModel
 import pep8
 
 
+env = os.environ.get('HBNB_TYPE_STORAGE')
+
+
 class TestAmenity(unittest.TestCase):
     """this will test the Amenity class"""
 
@@ -53,6 +56,7 @@ class TestAmenity(unittest.TestCase):
         """test attribute type for Amenity"""
         self.assertEqual(type(self.amenity.name), str)
 
+    @unittest.skipIf(env == 'db', "not using filestorage")
     def test_save_Amenity(self):
         """test if the save works"""
         self.amenity.save()
