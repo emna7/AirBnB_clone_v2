@@ -22,9 +22,11 @@ This is the console /command interpreter for the Holberton Airbnb clone project.
 To start, navigate to the project folder and enter `./console.py` in the shell.
 
 #### Create
-`create <class name>`
+`create <class name> <param1> <param2> ..`
+`<param> = <key>="<value>"`
 Ex:
 `create BaseModel`
+`create State name="California" zip=90201`
 
 #### Show
 `show <class name> <object id>`
@@ -52,3 +54,4 @@ Ex:
 Additionally, the console supports `<class name>.<command>(<parameters>)` syntax.
 Ex:
 `City.show(my_city_id)`
+Also, the console support file storage systems also data base storage. 
