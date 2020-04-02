@@ -62,6 +62,7 @@ class TestReview(unittest.TestCase):
         self.assertEqual(type(self.rev.place_id), str)
         self.assertEqual(type(self.rev.user_id), str)
 
+    @unittest.skipIf(env == 'db', "filestorage not in use")
     def test_save_Review(self):
         """test if the save works"""
         self.rev.save()
