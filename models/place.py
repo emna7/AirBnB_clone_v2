@@ -3,8 +3,6 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
-import models
-
 
 class Place(BaseModel, Base):
     """This is the class for Place
@@ -50,31 +48,30 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", backref="place", cascade="save-update, delete")
     amenities = relationship("Amenity", backref="place", secondary="place_amenity", viewonly=False)
 
-    if models.storage_type != 'db':
-        @property
-        def reviews(self):
-            """ Getter attribute that returns a dictionary of cities in a state """
-            from models import storage
-            objects = storage.all(Review)
-            newdict = dict()
-            for key, value in objects:
-                if value.id == self.id:
-                    newdict[key] = value
-            return (newdict)
+    # @property
+    # def reviews(self):
+    #     """ Getter attribute that returns a dictionary of cities in a state """
+    #     from models import storage
+    #     objects = storage.all(Review)
+    #     newdict = dict()
+    #     for key, value in objects:
+    #         if value.id == self.id:
+    #             newdict[key] = value
+    #     return (newdict)
 
-        @property
-        def amenities(self):
-            """ Getter method that returns a dictionary of cities in a state """
-            from models import storage
-            objects = storage.all(Amenity)
-            newdict = dict()
-            for key, value in objects:
-                if value.id == self.id:
-                    newdict[key] = value
-            return (newdict)
+    # @property
+    # def amenities(self):
+    #     """ Getter method that returns a dictionary of cities in a state """
+    #     from models import storage
+    #     objects = storage.all(Amenity)
+    #     newdict = dict()
+    #     for key, value in objects:
+    #         if value.id == self.id:
+    #             newdict[key] = value
+    #     return (newdict)
 
-        @amenities.setter
-        def amenities(self, obj):
-            """ Setter method that adds an Amenity """
-            if (type(obj) == Amenity):
-                self.amenity_ids.append(obj.id)
+    # @amenities.setter
+    # def amenities(self, obj):
+    #     """ Setter method that adds an Amenity """
+    #     if (type(obj) == Amenity):
+    #         self.amenity_ids.append(obj.id)
