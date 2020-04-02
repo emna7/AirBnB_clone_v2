@@ -7,6 +7,9 @@ from models.base_model import BaseModel
 import pep8
 
 
+env = os.environ.get('HBNB_TYPE_STORAGE')
+
+
 class TestState(unittest.TestCase):
     """this will test the State class"""
 
@@ -53,6 +56,7 @@ class TestState(unittest.TestCase):
         """test attribute type for State"""
         self.assertEqual(type(self.state.name), str)
 
+    @unittest.skipIf(env == 'db', "filestorage not in use")
     def test_save_State(self):
         """test if the save works"""
         self.state.save()
