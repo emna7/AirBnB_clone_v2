@@ -78,7 +78,3 @@ class DBStorage():
         session_factory.configure(bind=self.__engine)
         Session = scoped_session(session_factory)
         self.__session = Session()
-        
-            
-            
-        

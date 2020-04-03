@@ -12,7 +12,8 @@ class State(BaseModel, Base):
     """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="save-update, delete")
+    cities = relationship("City", backref="state",
+                          cascade="save-update, delete")
 
     @property
     def cities(self):
@@ -24,4 +25,3 @@ class State(BaseModel, Base):
             if value.id == self.id:
                 newdict[key] = value
         return (newdict)
-    
