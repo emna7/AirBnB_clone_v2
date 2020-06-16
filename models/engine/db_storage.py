@@ -78,3 +78,9 @@ class DBStorage():
         session_factory.configure(bind=self.__engine)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """a public method def close(self):: call remove() method on
+        the private session attribute (self.__session) """
+        self.reload()
+        self.__session.close()
