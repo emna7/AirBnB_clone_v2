@@ -15,13 +15,15 @@ class State(BaseModel, Base):
     cities = relationship("City", backref="state",
                           cascade="save-update, delete")
 
-    @property
-    def cities(self):
-        """ Getter attribute that returns a dictionary of cities in a state """
-        objects = storage.all(City)
-        newdict = dict()
-        for key, value in objects:
-            from models import storage
-            if value.id == self.id:
-                newdict[key] = value
-        return (newdict)
+    if getenv("HBNB_TYPE_STORAGE") != "db":
+        @property
+        def cities(self):
+            """ Getter attribute that returns a dictionary of
+            cities in a state """
+            objects = storage.all(City)
+            newdict = dict()
+            for key, value in objects:
+                from models import storage
+                if value.id == self.id:
+                    newdict[key] = value
+            return (newdict)
